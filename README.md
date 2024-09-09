@@ -13,12 +13,12 @@ Seconds, colon separated, abbreviated, all three can be parsed and interchanged.
 
 This library is a revamped/revised/updated version of the khill/php-duration library.
 
-# Install
+## Install
 ```bash
 composer require kcs/php-duration
 ```
 
-# Usage
+## Usage
 ```php
 use Kcs\Duration\Duration;
 
@@ -62,3 +62,10 @@ echo $duration->toSeconds(); // 4293
 echo $duration->toMinutes(); // 71.55
 echo $duration->toMinutes(0); // 72
 ```
+
+## Utilities
+
+This package contains some utility classes to help integration with other libraries:
+
+- `Kcs\Duration\Doctrine\DurationType`: doctrine type to help using the duration class with doctrine ORM and DBAL
+- `Kcs\Duration\Serializer\DurationHandler`: (de-)serialization handler to use with `kcs/serializer` library

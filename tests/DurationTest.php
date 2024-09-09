@@ -367,6 +367,18 @@ class DurationTest extends TestCase
     {
         $this->assertEquals($expected, (new Duration($duration))->toSeconds());
     }
+
+    #[DataProvider('provideHumanizedStringToSeconds')]
+    public function testConvertHumanizedStringToMilliseconds(int $expected, string $duration): void
+    {
+        $this->assertEquals($expected * 1000, (new Duration($duration))->toMilliseconds());
+    }
+
+    #[DataProvider('provideHumanizedStringToSeconds')]
+    public function testConvertHumanizedStringToMicroseconds(int $expected, string $duration): void
+    {
+        $this->assertEquals($expected * 1000000, (new Duration($duration))->toMicroseconds());
+    }
     
     public static function provideHumanizedStringToSeconds(): array
     {
@@ -392,6 +404,14 @@ class DurationTest extends TestCase
         $this->assertEquals(0, (new Duration('0d', 7))->toSeconds());
         $this->assertEquals(25200, (new Duration('1d', 7))->toSeconds());
         $this->assertEquals(91800, (new Duration('2d 11h 30m', 7))->toSeconds());
+
+        $this->assertEquals(0, (new Duration('0d', 7))->toMilliseconds());
+        $this->assertEquals(25_200_000, (new Duration('1d', 7))->toMilliseconds());
+        $this->assertEquals(91_800_000, (new Duration('2d 11h 30m', 7))->toMilliseconds());
+
+        $this->assertEquals(0, (new Duration('0d', 7))->toMicroseconds());
+        $this->assertEquals(25_200_000_000, (new Duration('1d', 7))->toMicroseconds());
+        $this->assertEquals(91_800_000_000, (new Duration('2d 11h 30m', 7))->toMicroseconds());
     }
 
     public function testSupportDecimals(): void

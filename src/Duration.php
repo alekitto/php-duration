@@ -121,6 +121,11 @@ final readonly class Duration
         }
     }
 
+    public static function fromMicroseconds(int $value): self
+    {
+        return new self(sprintf('%u.%06u', $value / 1_000_000, $value % 1_000_000));
+    }
+
     /**
      * Returns the duration as an amount of seconds.
      *
@@ -130,17 +135,39 @@ final readonly class Duration
      */
     public function toSeconds(int|bool $precision = false): int|float
     {
-        $output = ($this->days * $this->hoursPerDay * 60 * 60) +
-            ($this->hours * 60 * 60) +
-            ($this->minutes * 60) +
-            $this->seconds +
-            ($this->microseconds / 1_000_000.0);
+        $output = $this->toMicroseconds() / 1_000_000.0;
 
         return match ($precision) {
             false => $output,
             true, 0 => (int) round($output),
             default => round($output, $precision),
         };
+    }
+
+    /**
+     * Returns the duration as an amount of milliseconds.
+     *
+     * For example, one hour and 42 minutes would be "6_120_000"
+     */
+    public function toMilliseconds(): int
+    {
+        return (int) round($this->toMicroseconds() / 1000);
+    }
+
+    /**
+     * Returns the duration as an amount of microseconds.
+     *
+     * For example, one hour and 42 minutes would be "6_120_000_000"
+     */
+    public function toMicroseconds(): int
+    {
+        return (
+                ($this->days * $this->hoursPerDay * 60 * 60) +
+                ($this->hours * 60 * 60) +
+                ($this->minutes * 60) +
+                $this->seconds
+            ) * 1_000_000 +
+            $this->microseconds;
     }
 
     /**
